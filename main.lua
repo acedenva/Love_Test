@@ -1,5 +1,3 @@
-if pcall(require, "lldebugger") then require("lldebugger").start() end
-if pcall(require, "mobdebug") then require("mobdebug").start() end
 -- Symbols for the slots
 local isSpinning = false
 
@@ -15,20 +13,16 @@ function love.load()
 		symbols = {
 			leo = {
 				img = love.graphics.newImage("images/leo.png"),
-				y = -200
+				y = 0
 			},
 			mat = {
 				img = love.graphics.newImage("images/mat.png"),
-				y = 0 
+				y = 200
 			},
 			pat = {
 				img = love.graphics.newImage("images/pat.png"),
-				y = 200 
-			},
-			mat2 = {
-				img = love.graphics.newImage("images/mat.png"),
-				y = 400 
-			},
+				y = 400
+			}
 		}
 	}
 	ROLLER.rollerHeight = 0
@@ -41,10 +35,10 @@ end
 function love.update(dt)
 	if isSpinning then
 		for _, symbol in pairs(ROLLER.symbols) do
-			symbol.y = symbol.y + 800 * dt
 			if symbol.y > ROLLER.rollerHeight then
-				symbol.y = 0
+				symbol.y = symbol.y-ROLLER.rollerHeight 
 			end
+			symbol.y = symbol.y + 1600 * dt
 		end
 		--	ROLLERX = ROLLERX + 200 * dt
 	end
@@ -56,8 +50,15 @@ function love.update(dt)
 	end
 end
 
-function love.draw()
+function drawRoller()
 	for _, symbol in pairs(ROLLER.symbols) do
+		if symbol.y > 200 then
+				love.graphics.draw(symbol.img, 100, symbol.y - ROLLER.rollerHeight)
+		end
 		love.graphics.draw(symbol.img, 100, symbol.y)
 	end
+end
+
+function love.draw()
+	drawRoller()
 end
